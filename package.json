@@ -1,0 +1,24 @@
+{
+  "name": "reviews-api",
+  "version": "1.0.0",
+  "description": "Individual Service for Reviews",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Complex-Cormorant/reviews.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Complex-Cormorant/reviews/issues"
+  },
+  "homepage": "https://github.com/Complex-Cormorant/reviews#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
