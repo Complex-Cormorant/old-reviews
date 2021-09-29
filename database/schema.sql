@@ -1,44 +1,30 @@
 -- are IDs going to be given in the data or is the db expected to assing them? (int or serial?)
 
 CREATE SCHEMA IF NOT EXISTS reviews
-  CREATE TABLE product_reviews(
-    -- already has ID, move into reviews table 
-    product_id SERIAL NOT NULL,
-    -- int or smallint?
-    page INT,
-    -- default or limit, handle on query
-    count INT,
-    -- to do
-    results INT REFERENCES review_results (review_id)
-    PRIMARY KEY(product_id)
-  )
   CREATE TABLE review_results(
-    review_id SERIAL NOT NULL,
-    rating SMALLINT,
+    review_id INT NOT NULL,
+    product_id SERIAL NOT NULL,
+    -- rating SMALLINT,
     summary VARCHAR(500),
-    recommend BOOLEAN,
+    recommended BOOLEAN,
     PRIMARY KEY(review_id)
     -- this is null in atelier
-    response ,
+    response null,
     body VARCHAR(500),
     date DATE,
     reviewer_name VARCHAR(5000),
-    helpfulness SMALLINT,
+    helpfulness SERIAL,
     reported BOOLEAN,
-    photos REFERENCES INT photos (id)
-    -- add helpful here
+    photos INT REFERENCES photos (id),
+    ratings INT REFERENCES ratings (id)
   )
-
   CREATE TABLE photos(
-    id SERIAL PRIMARY KEY NOT NULL,
-    url VARCHAR(200)
+    id SERIAL NOT NULL,
+    url VARCHAR(200),
+    PRIMARY KEY (id)
   )
-
--- use tables already in existed
-CREATE SCHEMA IF NOT EXISTS meta
   CREATE TABLE ratings(
-    -- this doesn't have a unique identifier in atelier?
-    id NOT NULL,
+    id SERIAL NOT NULL,
     1 INT,
     2 INT,
     3 INT,
@@ -46,26 +32,54 @@ CREATE SCHEMA IF NOT EXISTS meta
     5 INT,
     PRIMARY KEY(id)
   )
-  CREATE TABLE recommended(
-    id SERIAL NOT NULL,
-    true INT,
-    false INT,
-    PRIMARY KEY(id)
-  )
-  -- move into results schema, add name & enum
+  CREATE TYPE characteristics AS ENUM ('fit', 'length', 'size', 'width', 'comfort', 'quality')
+
   CREATE TABLE characteristics(
-    id SERIAL NOT NULL,
-    fit INT REFERENCES characteristic_values(id),
-    length INT REFERENCES characteristic_values(id),
-    size INT REFERENCES characteristic_values(id),
-    width INT REFERENCES characteristic_values(id),
-    comfort INT REFERENCES characteristic_values(id),
-    quality INT REFERENCES characteristic_values(id),
-    PRIMARY KEY(id)
-  )
-  CREATE TABLE characteristic_values(
-    id SERIAL NOT NULL,
-    value SMALLINT,
-    PRIMARY KEY(id)
+    characteristic_id INT NOT NULL PRIMARY KEY,
+    characteristic characteristics,
+    value INT
   )
 
+  CREATE TABLE product_characteristics(
+    product_id INT REFERENCES review_results (product_id)
+    characteristic_id INT REFERENCES characteristics (characteristic_id)
+  )
+
+
+-- use tables already in existed
+-- CREATE SCHEMA IF NOT EXISTS meta
+
+--   CREATE TABLE recommended(
+--     id SERIAL NOT NULL,
+--     true INT,
+--     false INT,
+--     PRIMARY KEY(id)
+--   )
+  -- move into results schema, add name & enum
+  -- CREATE TABLE characteristics(
+  --   id SERIAL NOT NULL,
+  --   fit INT REFERENCES characteristic_values(id),
+  --   length INT REFERENCES characteristic_values(id),
+  --   size INT REFERENCES characteristic_values(id),
+  --   width INT REFERENCES characteristic_values(id),
+  --   comfort INT REFERENCES characteristic_values(id),
+  --   quality INT REFERENCES characteristic_values(id),
+  --   PRIMARY KEY(id)
+  -- )
+  -- CREATE TABLE characteristic_values(
+  --   id SERIAL NOT NULL,
+  --   value SMALLINT,
+  --   PRIMARY KEY(id)
+  -- )
+
+  -- CREATE TABLE product_reviews(
+  --   -- already has ID, move into reviews table
+
+  --   -- int or smallint?
+  --   page INT,
+  --   -- default or limit, handle on query
+  --   count INT,
+  --   -- to do
+  --   results INT REFERENCES review_results (review_id)
+  --   PRIMARY KEY(product_id)
+  -- )
