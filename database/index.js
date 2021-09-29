@@ -19,7 +19,9 @@ const Review = mongoose.model('Review', {
       id: Number,
       url: String
     }]
-  ]
+  ],
+  helpful: Number,
+  reported: Boolean
 });
 
 const Meta = mongoose.model('Meta', {
@@ -35,6 +37,7 @@ const Meta = mongoose.model('Meta', {
     false: Number,
     true: Number
   },
+  // SEPARATE TABLE in case of different characteristic
   characteristics: {
     Fit: {
       id: Number,

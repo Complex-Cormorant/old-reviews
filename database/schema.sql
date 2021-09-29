@@ -1,8 +1,12 @@
+-- are IDs going to be given in the data or is the db expected to assing them? (int or serial?)
+
 CREATE SCHEMA IF NOT EXISTS reviews
   CREATE TABLE product_reviews(
+    -- already has ID, move into reviews table 
     product_id SERIAL NOT NULL,
     -- int or smallint?
     page INT,
+    -- default or limit, handle on query
     count INT,
     -- to do
     results INT REFERENCES review_results (review_id)
@@ -20,14 +24,17 @@ CREATE SCHEMA IF NOT EXISTS reviews
     date DATE,
     reviewer_name VARCHAR(5000),
     helpfulness SMALLINT,
+    reported BOOLEAN,
     photos REFERENCES INT photos (id)
+    -- add helpful here
   )
-  -- should this be a table or just an array value in photos?
+
   CREATE TABLE photos(
     id SERIAL PRIMARY KEY NOT NULL,
     url VARCHAR(200)
   )
 
+-- use tables already in existed
 CREATE SCHEMA IF NOT EXISTS meta
   CREATE TABLE ratings(
     -- this doesn't have a unique identifier in atelier?
@@ -45,6 +52,7 @@ CREATE SCHEMA IF NOT EXISTS meta
     false INT,
     PRIMARY KEY(id)
   )
+  -- move into results schema, add name & enum
   CREATE TABLE characteristics(
     id SERIAL NOT NULL,
     fit INT REFERENCES characteristic_values(id),
@@ -60,3 +68,4 @@ CREATE SCHEMA IF NOT EXISTS meta
     value SMALLINT,
     PRIMARY KEY(id)
   )
+
