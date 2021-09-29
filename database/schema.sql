@@ -4,15 +4,16 @@ CREATE SCHEMA IF NOT EXISTS reviews
   CREATE TABLE review_results(
     review_id INT NOT NULL,
     product_id SERIAL NOT NULL,
-    -- rating SMALLINT,
     summary VARCHAR(500),
     recommended BOOLEAN,
-    PRIMARY KEY(review_id)
+    PRIMARY KEY(review_id),
+    rating INT,
     -- this is null in atelier
     response null,
     body VARCHAR(500),
     date DATE,
     reviewer_name VARCHAR(5000),
+    email VARCHAR(50),
     helpfulness SERIAL,
     reported BOOLEAN,
     photos INT REFERENCES photos (id),
@@ -23,26 +24,18 @@ CREATE SCHEMA IF NOT EXISTS reviews
     url VARCHAR(200),
     PRIMARY KEY (id)
   )
-  CREATE TABLE ratings(
-    id SERIAL NOT NULL,
-    1 INT,
-    2 INT,
-    3 INT,
-    4 INT,
-    5 INT,
-    PRIMARY KEY(id)
-  )
+
   CREATE TYPE characteristics AS ENUM ('fit', 'length', 'size', 'width', 'comfort', 'quality')
 
   CREATE TABLE characteristics(
     characteristic_id INT NOT NULL PRIMARY KEY,
     characteristic characteristics,
-    value INT
   )
 
-  CREATE TABLE product_characteristics(
-    product_id INT REFERENCES review_results (product_id)
-    characteristic_id INT REFERENCES characteristics (characteristic_id)
+  CREATE TABLE review_characteristics(
+    review_id INT REFERENCES review_results (review_id),
+    characteristic_id INT REFERENCES characteristics (characteristic_id),
+    value INT
   )
 
 
@@ -82,4 +75,14 @@ CREATE SCHEMA IF NOT EXISTS reviews
   --   -- to do
   --   results INT REFERENCES review_results (review_id)
   --   PRIMARY KEY(product_id)
+  -- )
+
+  -- CREATE TABLE ratings(
+  --   id SERIAL NOT NULL,
+  --   1 INT,
+  --   2 INT,
+  --   3 INT,
+  --   4 INT,
+  --   5 INT,
+  --   PRIMARY KEY(id)
   -- )
